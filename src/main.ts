@@ -188,7 +188,7 @@ function init() {
         }
         refMelChart.draw(normalized, `Reference: ${word.word}`, buffer.sampleRate, 256);
       }
-      wikiStatus.textContent = 'Loaded audio from Wiktionary';
+      // status already updated in fetchReferenceAudio (file name/license display)
     }
   }
 
@@ -247,7 +247,16 @@ function init() {
       }
       const result = await recorder.decodeArrayBuffer(audioResult.arrayBuffer);
       processAudio(result.buffer, result.sampleRate, 'ref');
+
+      // update status and licence info
+      wikiStatus.textContent =
+        `Loaded audio '${audioResult.fileName}'` +
+        (audioResult.license ? `  (${audioResult.license})` : '');
       wikiLicense.href = audioResult.commonsPageUrl;
+      wikiLicense.textContent = audioResult.license || 'Commons file';
+      if (audioResult.licenseUrl) {
+        wikiLicense.title = `License details: ${audioResult.licenseUrl}`;
+      }
       wikiLicense.hidden = false;
     } catch (err) {
       wikiStatus.textContent = `Wiktionary fetch failed: ${err}`;
