@@ -1,5 +1,8 @@
 # Phonetics Trainer
 
+> ⚡ **Note:** This project was created with an AI-vibe coding approach, incorporating automated assistance and generative tools throughout development.
+
+
 A browser-based vowel pronunciation analyser built with TypeScript and Vite.
 Record yourself, compare your vowel formants against reference values or a
 Wiktionary audio sample, and see where your pronunciation lands on a standard
