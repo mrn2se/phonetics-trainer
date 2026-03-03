@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy — Phonetics Trainer</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg:      #0d1117;
+        --surface: #161b22;
+        --border:  rgba(255,255,255,0.08);
+        --text:    #e6edf3;
+        --muted:   rgba(255,255,255,0.55);
+        --accent:  #00d4ff;
+        --accent2: #ff6b35;
+        --radius:  10px;
+      }
+
+      html, body {
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem 1.4rem;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+      }
+
+      header h1 { font-size: 1.05rem; font-weight: 700; }
+      header .subtitle { font-size: 0.8rem; color: var(--muted); }
+      header a.back {
+        margin-left: auto;
+        font-size: 0.82rem;
+        color: var(--accent);
+        text-decoration: none;
+        border: 1px solid rgba(0,212,255,0.3);
+        border-radius: 6px;
+        padding: 0.25rem 0.75rem;
+        transition: background 0.15s;
+      }
+      header a.back:hover { background: rgba(0,212,255,0.08); }
+
+      main {
+        max-width: 820px;
+        margin: 2.5rem auto;
+        padding: 0 1.4rem 3rem;
+      }
+
+      section {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.4rem 1.6rem;
+        margin-bottom: 1.2rem;
+      }
+
+      section h2 {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 0.9rem;
+      }
+
+      section p { margin-bottom: 0.75rem; color: var(--text); }
+      section p:last-child { margin-bottom: 0; }
+
+      a { color: var(--accent); }
+      a:visited { color: var(--accent2); }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Phonetics Trainer</h1>
+        <div class="subtitle">Privacy Policy</div>
+      </div>
+      <a href="index.html" class="back">← Back to app</a>
+    </header>
+
+    <main>
+      <section>
+        <h2>No data collection</h2>
+        <p>This application runs entirely in the browser and does not collect, transmit, or store any personal data. All audio processing is performed locally on the user's device using the Web Audio API; no recordings are uploaded or sent to any server.</p>
+      </section>
+
+      <section>
+        <h2>Hosting and privacy statements</h2>
+        <p>The static files for this project are served via GitHub Pages. As such, users should refer to GitHub's own privacy policies for information regarding cookies, logs, and other data that may be processed by the hosting platform.</p>
+        <ul>
+          <li><a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub General Privacy Statement</a></li>
+          <li><a href="https://docs.github.com/en/site-policy/privacy-policies/github-cookies" target="_blank" rel="noopener">GitHub Cookies</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Project repository</h2>
+        <p>The source code of Phonetics Trainer is available on GitHub. Visit the project page for details, issues, and licence information.</p>
+        <p><a href="https://github.com/mrn2se/phonetics-trainer" target="_blank" rel="noopener">https://github.com/mrn2se/phonetics-trainer</a></p>
+      </section>
+    </main>
+
+    <footer>
+      Phonetics Trainer &mdash; educational use only &mdash;
+      <a href="index.html">back to app</a>
+    </footer>
+  </body>
+</html>
