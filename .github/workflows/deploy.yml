@@ -62,7 +62,7 @@ jobs:
     name: Deploy to GitHub Pages
     # Only deploy on pushes to the default branch (not on PRs or tags)
     # currently disabled to avoid unnecessary deployments during development; enable when ready to deploy from main
-    if: false && (github.event_name == 'push' && (github.ref == 'refs/heads/main'))
+    if: (github.event_name == 'push' && (github.ref == 'refs/heads/main'))
     needs: build
     runs-on: ubuntu-latest
     environment:
