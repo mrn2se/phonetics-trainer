@@ -23,7 +23,7 @@ jobs:
   # check if triggered manually. if that was the case, increase the version number in package.json and commit the change to trigger the rest of the workflow
   bump-version:
     name: Bump version on manual trigger
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/deploy'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,12 +31,21 @@ jobs:
       - name: Bump version
         run: |
           npm version patch -m "Bump version to %s [skip ci]"
-          git push origin HEAD:main
+      
+      - name: create tag for new version
+        run: |
+          VERSION=$(jq -r .version package.json)
+          git tag v$VERSION
+
+      - name: Push version bump
+        run: |
+          git push origin HEAD:deploy --tags
 
           
   # ── Build ──────────────────────────────────────────────────────────────────
   build:
     name: Build
+    needs: bump-version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
