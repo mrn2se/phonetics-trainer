@@ -13,6 +13,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         disclaimer: resolve(__dirname, 'disclaimer.html'),
+        privacy: resolve(__dirname, 'privacy.html'),
       },
     },
   },
