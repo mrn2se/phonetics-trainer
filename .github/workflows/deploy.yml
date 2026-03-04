@@ -110,8 +110,11 @@ jobs:
       - name: Read version from package.json
         id: pkg
         run: |
-          echo "VERSION=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
-          echo "DESCRIPTION=$(node -p \"require('./package.json').description\")" >> $GITHUB_ENV
+          # use simple jq commands to avoid complex quoting
+          VERSION=$(jq -r .version package.json)
+          DESCRIPTION=$(jq -r .description package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "DESCRIPTION=$DESCRIPTION" >> $GITHUB_ENV
 
       - name: Package release archive
         run: |
