@@ -21,28 +21,6 @@ permissions:
   id-token: write   # needed for OIDC token used by actions/deploy-pages
 
 jobs:
-  # check if triggered manually. if that was the case, increase the version number in package.json and commit the change to trigger the rest of the workflow
-  bump-version:
-    name: Bump version on manual trigger
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/deploy'
-    timeout-minutes: 5
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Bump version
-        run: |
-          npm version patch -m "Bump version to %s [skip ci]"
-      
-      - name: create tag for new version
-        run: |
-          VERSION=$(jq -r .version package.json)
-          git tag v$VERSION
-
-      - name: Push version bump
-        run: |
-          git push origin HEAD:deploy --tags
-
           
   # ── Build ──────────────────────────────────────────────────────────────────
   build:
@@ -106,7 +84,7 @@ jobs:
     name: Create Release
     # Only run when a version tag is pushed
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [build, bump-version]
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
