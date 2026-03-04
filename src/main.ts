@@ -253,9 +253,9 @@ function init() {
         `Loaded audio '${audioResult.fileName}'` +
         (audioResult.license ? `  (${audioResult.license})` : '');
       wikiLicense.href = audioResult.commonsPageUrl;
-      wikiLicense.textContent = audioResult.license || 'Commons file';
+      wikiLicense.textContent = `Info: ${audioResult.fileName || 'Commons file'}`;
       if (audioResult.licenseUrl) {
-        wikiLicense.title = `License details: ${audioResult.licenseUrl}`;
+        wikiLicense.title = `Source and License details: ${audioResult.licenseUrl}, ${audioResult.commonsPageUrl}`;
       }
       wikiLicense.hidden = false;
     } catch (err) {
