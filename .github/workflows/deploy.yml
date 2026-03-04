@@ -1,0 +1,114 @@
+name: Build, Deploy & Release
+
+on:
+  push:
+    branches: [main, deploy]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+# Allow one concurrent deployment; cancel in-progress runs on new pushes.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write   # needed for creating releases
+  pages: write      # needed for deploying to GitHub Pages
+  id-token: write   # needed for OIDC token used by actions/deploy-pages
+
+jobs:
+  # ── Build ──────────────────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          GITHUB_PAGES: 'true'
+
+      # The .nojekyll file prevents GitHub Pages from processing the output
+      # as a Jekyll site, which would otherwise ignore _-prefixed directories.
+      - name: Add .nojekyll
+        run: touch dist/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      # Also upload dist as a workflow artifact for the release job
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
+
+  # ── Deploy to GitHub Pages ─────────────────────────────────────────────────
+  deploy:
+    name: Deploy to GitHub Pages
+    # Only deploy on pushes to the default branch (not on PRs or tags)
+    # currently disabled to avoid unnecessary deployments during development; enable when ready to deploy from main
+    if: (github.event_name == 'push' && (github.ref == 'refs/heads/deploy'))
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # ── Create GitHub Release ──────────────────────────────────────────────────
+  release:
+    name: Create Release
+    # Only run when a version tag is pushed
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      # grab the version from package.json so we don't have to rely on the
+      # tag name matching exactly; the file is already checked out above
+      - name: Read version from package.json
+        id: pkg
+        run: |
+          echo "VERSION=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
+          echo "DESCRIPTION=$(node -p \"require('./package.json').description\")" >> $GITHUB_ENV
+
+      - name: Package release archive
+        run: |
+          cd dist
+          zip -r ../phonetics-trainer-${{ env.VERSION }}.zip .
+        shell: bash
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: phonetics-trainer-${{ env.VERSION }}.zip
+          generate_release_notes: true
+          body: |
+            ## Phonetics Trainer ${{ env.VERSION }}
+
+            ${{ env.DESCRIPTION }}
