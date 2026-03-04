@@ -12,6 +12,10 @@ export interface WordAudioResult {
   /** Direct link to the Wikimedia Commons file page (for licence attribution) */
   commonsPageUrl: string;
   fileName: string;
+  /** SPDX-style or human-readable license name (if available) */
+  license?: string;
+  /** URL pointing to the licence text */
+  licenseUrl?: string;
 }
 
 /**
@@ -88,6 +92,35 @@ async function resolveCommonsFileUrl(fileName: string): Promise<string | null> {
 }
 
 /** Fetch first available audio for a word, returning the buffer and Commons attribution info */
+// helper that queries Commons for licence metadata
+async function fetchFileMetadata(
+  fileName: string,
+): Promise<{license?: string; licenseUrl?: string}> {
+  try {
+    const params = new URLSearchParams({
+      action: 'query',
+      titles: `File:${fileName}`,
+      prop: 'imageinfo',
+      iiprop: 'extmetadata',
+      format: 'json',
+      origin: '*',
+    });
+    const res = await fetch(`${WIKI_COMMONS}?${params}`);
+    if (!res.ok) return {};
+    const data = await res.json();
+    const pages = data?.query?.pages ?? {};
+    const page = Object.values(pages)[0] as any;
+    const info = page?.imageinfo?.[0]?.extmetadata;
+    if (!info) return {};
+    return {
+      license: info.LicenseShortName?.value || info.License?.value,
+      licenseUrl: info.LicenseUrl?.value,
+    };
+  } catch {
+    return {};
+  }
+}
+
 export async function fetchWordAudio(
   word: string,
   langCode: string,
@@ -99,10 +132,13 @@ export async function fetchWordAudio(
     try {
       const res = await fetch(audio.url);
       if (res.ok) {
+        const metadata = await fetchFileMetadata(audio.fileName);
         return {
           arrayBuffer: await res.arrayBuffer(),
           commonsPageUrl: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(audio.fileName)}`,
           fileName: audio.fileName,
+          license: metadata.license,
+          licenseUrl: metadata.licenseUrl,
         };
       }
     } catch {
