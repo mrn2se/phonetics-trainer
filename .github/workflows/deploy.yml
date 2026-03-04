@@ -1,5 +1,6 @@
 name: Build, Deploy & Release
 
+
 on:
   push:
     branches: [main, deploy]
@@ -24,6 +25,7 @@ jobs:
   bump-version:
     name: Bump version on manual trigger
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/deploy'
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,8 +46,9 @@ jobs:
           
   # ── Build ──────────────────────────────────────────────────────────────────
   build:
+
     name: Build
-    needs: bump-version
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -103,8 +106,9 @@ jobs:
     name: Create Release
     # Only run when a version tag is pushed
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: build
+    needs: [build, bump-version]
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
 
