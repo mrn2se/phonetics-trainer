@@ -89,23 +89,26 @@ jobs:
           name: dist
           path: dist
 
+      # grab the version from package.json so we don't have to rely on the
+      # tag name matching exactly; the file is already checked out above
+      - name: Read version from package.json
+        id: pkg
+        run: |
+          echo "VERSION=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
+          echo "DESCRIPTION=$(node -p \"require('./package.json').description\")" >> $GITHUB_ENV
+
       - name: Package release archive
         run: |
           cd dist
-          zip -r ../phonetics-trainer-${{ github.ref_name }}.zip .
+          zip -r ../phonetics-trainer-${{ env.VERSION }}.zip .
         shell: bash
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: phonetics-trainer-${{ github.ref_name }}.zip
+          files: phonetics-trainer-${{ env.VERSION }}.zip
           generate_release_notes: true
           body: |
-            ## Phonetics Trainer ${{ github.ref_name }}
+            ## Phonetics Trainer ${{ env.VERSION }}
 
-            A browser-based vowel pronunciation analyser. No server required — all
-            processing runs locally in the browser using the Web Audio API.
-
-            ### Installation
-            Download the zip, extract it, and open `index.html` in any modern browser.
-            Or visit the live version on GitHub Pages (see link above).
+            ${{ env.DESCRIPTION }}
