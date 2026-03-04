@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phonetics Trainer</title>
+  </head>
+  <body>
+    <div id="app">
+
+      <!-- ── Header ─────────────────────────────────────────────────────── -->
+      <header>
+        <div>
+          <h1>Phonetics Trainer</h1>
+          <div class="subtitle">Vowel pronunciation analyser</div>
+        </div>
+        <div class="lang-row">
+          <label for="lang-select">Language:</label>
+          <select id="lang-select"></select>
+        </div>
+        <div class="speaker-toggle" role="group" aria-label="Speaker type">
+          <button class="speaker-btn active" data-speaker="male">♂ Male</button>
+          <button class="speaker-btn" data-speaker="female">♀ Female</button>
+        </div>
+        <a href="disclaimer.html" class="disclaimer-link" target="_blank">Disclaimer</a>
+      </header>
+
+      <!-- ── Main ───────────────────────────────────────────────────────── -->
+      <main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+          <!-- Record -->
+          <div class="panel">
+            <div class="panel-header">Your voice</div>
+            <div class="record-area">
+              <button id="record-btn" type="button" aria-label="Record"></button>
+              <span id="record-label">Record</span>
+              <span id="status-text">Click to start recording</span>
+            </div>
+            <div class="panel-body">
+              <div class="formant-row">
+                <span class="formant-label">Detected formants (RMS-weighted avg)</span>
+                <span id="user-formants" class="formant-value user-color">—</span>
+              </div>
+            </div>
+            <!-- debug stats, populated by JS -->
+            <div id="debug-info" class="debug-panel"></div>
+          </div>
+
+          <!-- Reference word picker -->
+          <div class="panel">
+            <div class="panel-header">
+              Reference word
+              <a id="wiki-license" class="cc-badge" href="disclaimer.html" target="_blank" hidden>CC BY-SA</a>
+            </div>
+            <div id="word-list"></div>
+            <div class="ref-audio-area">
+              <button id="ref-audio-btn" disabled>Fetch audio from Wiktionary</button>
+              <span id="wiki-status"></span>
+            </div>
+            <div class="panel-body">
+              <div class="formant-row">
+                <span class="formant-label">Reference formants</span>
+                <span id="ref-formants" class="formant-value ref-color">—</span>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+        <!-- Content: charts -->
+        <div class="content-area">
+
+          <!-- Vowel diagram (spans both rows in left column) -->
+          <div class="canvas-panel" style="grid-row: 1 / 3;">
+            <div class="panel-header">Vowel space (F1 / F2)</div>
+            <div class="legend">
+              <span class="chip chip-user">You (avg)</span>
+              <span class="chip chip-user-dim">All frames</span>
+              <span class="chip chip-user-bright">Used frames</span>
+              <span class="chip chip-ref">Reference</span>
+            </div>
+            <canvas id="vowel-canvas"></canvas>
+          </div>
+
+          <!-- User mel -->
+          <div class="canvas-panel">
+            <div class="panel-header">Mel filterbank — your recording</div>
+            <canvas id="user-mel-canvas"></canvas>
+          </div>
+
+          <!-- Reference mel -->
+          <div class="canvas-panel">
+            <div class="panel-header">Mel filterbank — reference (Wiktionary)</div>
+            <canvas id="ref-mel-canvas"></canvas>
+          </div>
+
+          <!-- LPC spectrum (spans full width) -->
+          <div class="canvas-panel lpc-panel">
+            <div class="panel-header">LPC spectral envelope — representative frame (formant debug)</div>
+            <canvas id="lpc-canvas"></canvas>
+          </div>
+
+        </div>
+      </main>
+
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

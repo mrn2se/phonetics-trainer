@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disclaimer — Phonetics Trainer</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg:      #0d1117;
+        --surface: #161b22;
+        --border:  rgba(255,255,255,0.08);
+        --text:    #e6edf3;
+        --muted:   rgba(255,255,255,0.55);
+        --accent:  #00d4ff;
+        --accent2: #ff6b35;
+        --radius:  10px;
+      }
+
+      html, body {
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem 1.4rem;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+      }
+
+      header h1 { font-size: 1.05rem; font-weight: 700; }
+      header .subtitle { font-size: 0.8rem; color: var(--muted); }
+      header a.back {
+        margin-left: auto;
+        font-size: 0.82rem;
+        color: var(--accent);
+        text-decoration: none;
+        border: 1px solid rgba(0,212,255,0.3);
+        border-radius: 6px;
+        padding: 0.25rem 0.75rem;
+        transition: background 0.15s;
+      }
+      header a.back:hover { background: rgba(0,212,255,0.08); }
+
+      main {
+        max-width: 820px;
+        margin: 2.5rem auto;
+        padding: 0 1.4rem 3rem;
+      }
+
+      section {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.4rem 1.6rem;
+        margin-bottom: 1.2rem;
+      }
+
+      section h2 {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 0.9rem;
+      }
+
+      section p { margin-bottom: 0.75rem; color: var(--text); }
+      section p:last-child { margin-bottom: 0; }
+
+      section ul {
+        margin: 0.5rem 0 0.75rem 1.2rem;
+        color: var(--text);
+      }
+      section ul li { margin-bottom: 0.3rem; }
+
+      a { color: var(--accent); }
+      a:visited { color: var(--accent2); }
+
+      .ref cite {
+        font-style: normal;
+        font-family: 'Georgia', serif;
+        font-size: 0.9em;
+        color: var(--muted);
+      }
+
+      .cc-badge-inline {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 1px 7px;
+        border-radius: 4px;
+        background: rgba(255,107,53,0.15);
+        border: 1px solid rgba(255,107,53,0.4);
+        color: var(--accent2);
+        letter-spacing: 0.05em;
+        vertical-align: middle;
+        white-space: nowrap;
+      }
+
+      footer {
+        text-align: center;
+        padding: 1.2rem;
+        font-size: 0.75rem;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Phonetics Trainer</h1>
+        <div class="subtitle">Disclaimer &amp; Licence Information</div>
+      </div>
+      <a href="index.html" class="back">← Back to app</a>
+    </header>
+
+    <main>
+
+      <section>
+        <h2>Purpose and Accuracy</h2>
+        <p>
+          Phonetics Trainer is an <strong>educational tool</strong> intended to help language
+          learners develop an intuition for vowel placement. The formant measurements
+          displayed are approximate and depend on microphone quality, room acoustics,
+          recording duration, and the accuracy of the LPC-based formant tracker.
+          They should not be used for clinical, research, or diagnostic purposes.
+        </p>
+        <p>
+          Vowel formant targets shipped with the application are derived from published
+          acoustic-phonetics literature. Individual speakers vary considerably; the
+          reference values represent population averages, not prescriptions.
+        </p>
+      </section>
+
+      <section>
+        <h2>Runtime Audio Content from Wiktionary</h2>
+        <p>
+          When you click <em>Fetch audio from Wiktionary</em>, the application makes a
+          live request to the <a href="https://en.wiktionary.org/" target="_blank" rel="noopener">Wiktionary</a>
+          API and streams an audio file hosted on
+          <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">Wikimedia Commons</a>.
+        </p>
+        <ul>
+          <li>
+            Audio files on Wikimedia Commons are contributed by volunteers and are
+            typically released under
+            <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">
+              Creative Commons Attribution-ShareAlike 3.0
+            </a>
+            (<span class="cc-badge-inline">CC BY-SA 3.0</span>) or a
+            compatible free licence. Each file's individual licence is stated on its
+            Wikimedia Commons page (linked from the badge that appears in the app when
+            audio is loaded).
+          </li>
+          <li>
+            The application does <strong>not</strong> embed, redistribute, or store any
+            Wiktionary audio. The audio is fetched on demand directly from Wikimedia
+            servers and processed in-memory only.
+          </li>
+          <li>
+            Use of the Wiktionary and Wikimedia Commons APIs is subject to the
+            <a href="https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use" target="_blank" rel="noopener">
+              Wikimedia Foundation Terms of Use</a>.
+          </li>
+        </ul>
+      </section>
+
+      <section ref class="ref">
+        <h2>Third-Party Scientific Data</h2>
+        <p>
+          Vowel formant reference values (F1, F2 for male and female speakers) are based on:
+        </p>
+        <ul>
+          <li>
+            <cite>Peterson, G. E., &amp; Barney, H. L. (1952). Control methods used in a
+            study of the vowels. <em>Journal of the Acoustical Society of America</em>,
+            24(2), 175–184.</cite>
+          </li>
+          <li>
+            <cite>Hillenbrand, J., Getty, L. A., Clark, M. J., &amp; Wheeler, K. (1995).
+            Acoustic characteristics of American English vowels.
+            <em>Journal of the Acoustical Society of America</em>, 97(5), 3099–3111.</cite>
+          </li>
+        </ul>
+        <p>
+          Raw scientific measurement data (frequencies, means) is factual information and
+          is not subject to copyright. Attribution is provided here as a courtesy.
+        </p>
+      </section>
+
+      <section>
+        <h2>Application Licence</h2>
+        <p>
+          The source code of Phonetics Trainer is released under the
+          <strong>MIT Licence</strong>. See the
+          <a href="https://github.com/" target="_blank" rel="noopener">repository</a>
+          for the full licence text.
+        </p>
+        <p style="font-size:0.82rem; color: var(--muted);">
+          THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+          OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+          MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+        </p>
+      </section>
+
+    </main>
+
+    <footer>
+      Phonetics Trainer &mdash; educational use only &mdash;
+      <a href="index.html">back to app</a>
+    </footer>
+  </body>
+</html>
