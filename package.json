@@ -1,7 +1,7 @@
 {
   "name": "phonetics-trainer",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "description": "A browser-based vowel pronunciation analyser. No server required — all processing runs locally in the browser using the Web Audio API.",
   "scripts": {

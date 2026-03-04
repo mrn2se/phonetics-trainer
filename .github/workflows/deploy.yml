@@ -1,5 +1,6 @@
 name: Build, Deploy & Release
 
+
 on:
   push:
     branches: [main, deploy]
@@ -20,23 +21,12 @@ permissions:
   id-token: write   # needed for OIDC token used by actions/deploy-pages
 
 jobs:
-  # check if triggered manually. if that was the case, increase the version number in package.json and commit the change to trigger the rest of the workflow
-  bump-version:
-    name: Bump version on manual trigger
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Bump version
-        run: |
-          npm version patch -m "Bump version to %s [skip ci]"
-          git push origin HEAD:main
-
           
   # ── Build ──────────────────────────────────────────────────────────────────
   build:
+
     name: Build
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -96,6 +86,7 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
 
@@ -110,8 +101,11 @@ jobs:
       - name: Read version from package.json
         id: pkg
         run: |
-          echo "VERSION=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
-          echo "DESCRIPTION=$(node -p \"require('./package.json').description\")" >> $GITHUB_ENV
+          # use simple jq commands to avoid complex quoting
+          VERSION=$(jq -r .version package.json)
+          DESCRIPTION=$(jq -r .description package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "DESCRIPTION=$DESCRIPTION" >> $GITHUB_ENV
 
       - name: Package release archive
         run: |
