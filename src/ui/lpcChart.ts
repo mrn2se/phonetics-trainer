@@ -17,6 +17,10 @@ export class LpcChart {
   resize() {
     const dpr = window.devicePixelRatio || 1;
     const rect = this.canvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) {
+      requestAnimationFrame(() => this.resize());
+      return;
+    }
     this.canvas.width = rect.width * dpr;
     this.canvas.height = rect.height * dpr;
     this.ctx.scale(dpr, dpr);
