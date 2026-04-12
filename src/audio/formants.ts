@@ -241,9 +241,9 @@ export function averageFormants(
 
   const allPoints = frames.map((f) => ({ f1: f.f1, f2: f.f2, time: f.time }));
 
-  // Step 1: middle 50%
-  const s = Math.floor(frames.length * 0.25);
-  const e = Math.floor(frames.length * 0.75);
+  // Step 1: middle 80%
+  const s = Math.floor(frames.length * 0.1);
+  const e = Math.floor(frames.length * 0.9);
   const midSlice = frames.length >= 4 ? frames.slice(s, e) : frames;
 
   // Step 2: IQR outlier rejection
@@ -251,14 +251,21 @@ export function averageFormants(
 
   const usedPoints = clean.map((f) => ({ f1: f.f1, f2: f.f2, time: f.time }));
 
-  // Step 3: simple mean
-  const n = clean.length;
-  const f1 = clean.reduce((a, f) => a + f.f1, 0) / n;
-  const f2 = clean.reduce((a, f) => a + f.f2, 0) / n;
-  const f3 = clean.reduce((a, f) => a + f.f3, 0) / n;
+  const sorted = (vals: number[]) => [...vals].sort((a, b) => a - b);
+  const median = (vals: number[]) => {
+    const s = sorted(vals);
+    const m = Math.floor(s.length / 2);
+    return s.length % 2 === 1 ? s[m] : (s[m - 1] + s[m]) / 2;
+  };
 
+  // Step 3: median of the remaining frames
   const f1Vals = clean.map((f) => f.f1);
   const f2Vals = clean.map((f) => f.f2);
+  const f3Vals = clean.map((f) => f.f3);
+  const f1 = median(f1Vals);
+  const f2 = median(f2Vals);
+  const f3 = median(f3Vals);
+
   const std = (vals: number[], mean: number) =>
     Math.sqrt(vals.reduce((a, v) => a + (v - mean) ** 2, 0) / vals.length);
 
